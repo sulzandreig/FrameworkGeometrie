@@ -18,6 +18,7 @@ public class DrawingBoard extends JPanel{
     public ArrayList<Line> lines;
     public ArrayList<Quadrilateral> quadrilaters;
     public ArrayList<Triangle> triangles;
+    public ArrayList<Poligon> polygons;
     public int zoom;
     public int centerX = LabGEO1.width/2;
     public int centerY = LabGEO1.height/2;
@@ -43,6 +44,7 @@ public class DrawingBoard extends JPanel{
         lines = new ArrayList<>();
         quadrilaters = new ArrayList<>();
         triangles = new ArrayList<>();
+        polygons = new ArrayList<>();
     }
     
     public void repaint(Graphics gra){
@@ -86,6 +88,12 @@ public class DrawingBoard extends JPanel{
         if(quadrilaters != null){
             quadrilaters.stream().forEach((patrulater) -> {
                 patrulater.draw(g, centerX, centerY, zoom, true);
+            });
+        }
+        g.setColor(Color.ORANGE);
+        if(polygons != null){
+            polygons.stream().forEach((polygon) -> {
+                polygon.draw(g, centerX, centerY, zoom, true);
             });
         }
         g.setColor(Color.BLUE);
