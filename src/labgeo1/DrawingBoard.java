@@ -1,5 +1,6 @@
 package labgeo1;
 
+import ObiecteGeometrice.Poligon;
 import ObiecteGeometrice.Quadrilateral;
 import ObiecteGeometrice.Line;
 import ObiecteGeometrice.Point;
