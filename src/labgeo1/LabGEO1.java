@@ -74,7 +74,7 @@ public class LabGEO1 extends JFrame{
     public static void main(String[] args) {
         Scanner s = new Scanner(System.in);
         Point A,B,C,D,M;
-        System.out.print("A = ");
+        /*System.out.print("A = ");
         A = new Point("A",s.nextDouble(),s.nextDouble(),0, Point.USER_POINT);
         System.out.print("B = ");
         B = new Point("B",s.nextDouble(),s.nextDouble(),0, Point.USER_POINT);
