@@ -5,6 +5,10 @@
  */
 package labgeo1;
 
+import ObiecteGeometrice.Quadrilateral;
+import ObiecteGeometrice.Point;
+import StructuriDate.BinaryTree;
+import StructuriDate.DoubleConnectedEdgeList;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.util.Scanner;
@@ -70,7 +74,7 @@ public class LabGEO1 extends JFrame{
     public static void main(String[] args) {
         Scanner s = new Scanner(System.in);
         Point A,B,C,D,M;
-        System.out.print("A = ");
+        /*System.out.print("A = ");
         A = new Point("A",s.nextDouble(),s.nextDouble(),0, Point.USER_POINT);
         System.out.print("B = ");
         B = new Point("B",s.nextDouble(),s.nextDouble(),0, Point.USER_POINT);
@@ -78,12 +82,19 @@ public class LabGEO1 extends JFrame{
         C = new Point("C",s.nextDouble(),s.nextDouble(),0, Point.USER_POINT);
         System.out.print("D = ");
         D = new Point("D",s.nextDouble(),s.nextDouble(),0, Point.USER_POINT);
+        */
+        int a,b,c,d;
+        int n = s.nextInt();
+        BinaryTree bt = new BinaryTree();
+        while(n-- > 0){
+            bt.add(s.nextInt());
+        }
         
-        LabGEO1 frame = new LabGEO1();
-        Quadrilateral patrulater = new Quadrilateral(A, B, C, D);
-        patrulater.pointPositionOverOuterCircle(3);
-        System.out.println("circumscriptibil: " + patrulater.checkDistrict());
-        drawingBoard.quadrilaters.add(patrulater);
-        frame.start();
+        //LabGEO1 frame = new LabGEO1();
+        //Quadrilateral patrulater = new Quadrilateral(A, B, C, D);
+        //patrulater.pointPositionRelativeToOuterCircle(3);
+        //System.out.println("circumscriptibil: " + patrulater.checkDistrict());
+        //drawingBoard.quadrilaters.add(patrulater);
+        //frame.start();
     }
 }

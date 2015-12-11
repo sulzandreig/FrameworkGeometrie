@@ -1,5 +1,10 @@
 package labgeo1;
 
+import ObiecteGeometrice.Quadrilateral;
+import ObiecteGeometrice.Line;
+import ObiecteGeometrice.Point;
+import ObiecteGeometrice.VectorGeo;
+import ObiecteGeometrice.Triangle;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
