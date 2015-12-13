@@ -1,6 +1,6 @@
 package ObiecteGeometrice;
 
-import labgeo1.Drawable;
+import ProiectGeometrie.Drawable;
 
 /**
  *

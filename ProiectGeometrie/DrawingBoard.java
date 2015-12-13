@@ -1,4 +1,4 @@
-package labgeo1;
+package ProiectGeometrie;
 
 import ObiecteGeometrice.Quadrilateral;
 import ObiecteGeometrice.Line;

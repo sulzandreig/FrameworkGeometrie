@@ -1,4 +1,4 @@
-package labgeo1;
+package ProiectGeometrie;
 
 import java.awt.Graphics2D;
 

@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Arrays;
 import java.util.Random;
-import labgeo1.ProiectGeometrie;
+import ProiectGeometrie.ProiectGeometrie;
 
 /**
  *
