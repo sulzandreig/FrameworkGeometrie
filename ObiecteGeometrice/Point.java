@@ -51,7 +51,7 @@ public class Point extends GeometricalObject implements Comparable<Point>{
         }
     }
     /*
-        This function is used bye the weak poligon triangulation and will be modified later of deleted
+        This function is used bye the weak poligon triangulation and will be modified later or deleted
     */
     public boolean isLeftTurn(Point P, Point Q){
         return     ( (Q.x * this.y + P.x * Q.y + this.x * P.y -
