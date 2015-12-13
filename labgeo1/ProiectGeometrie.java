@@ -5,10 +5,7 @@
  */
 package labgeo1;
 
-import ObiecteGeometrice.Quadrilateral;
 import ObiecteGeometrice.Point;
-import StructuriDate.BinaryTree;
-import StructuriDate.DoubleConnectedEdgeList;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.util.Scanner;
@@ -21,13 +18,13 @@ import javax.swing.JFrame;
  *
  * @author Dragos-Alexandru
  */
-public class LabGEO1 extends JFrame{
+public class ProiectGeometrie extends JFrame{
     public static DrawingBoard drawingBoard;
     public JButton exit;
     public static int width = 600;
     public static int height = 600;
     public static int zoom = 30;
-    public LabGEO1(){
+    public ProiectGeometrie(){
         super("LabGeo");
         this.setSize(600,600);
         this.setLocationRelativeTo(null);
@@ -37,8 +34,8 @@ public class LabGEO1 extends JFrame{
         drawingBoard = new DrawingBoard(width,height,zoom);
         exit = new JButton("Exit");
         exit.addActionListener((ActionEvent e) -> {
-            if (exit.getParent().getParent().getParent().getParent() instanceof LabGEO1) {
-                LabGEO1 parent1 = (LabGEO1)exit.getParent().getParent().getParent().getParent();
+            if (exit.getParent().getParent().getParent().getParent() instanceof ProiectGeometrie) {
+                ProiectGeometrie parent1 = (ProiectGeometrie)exit.getParent().getParent().getParent().getParent();
                 parent1.dispose();
             }
         });
@@ -49,7 +46,7 @@ public class LabGEO1 extends JFrame{
         try {
             Thread.sleep(100);
         } catch (InterruptedException ex) {
-            Logger.getLogger(LabGEO1.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProiectGeometrie.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -61,7 +58,7 @@ public class LabGEO1 extends JFrame{
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(LabGEO1.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ProiectGeometrie.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }else{
                 exit = true;
@@ -83,7 +80,7 @@ public class LabGEO1 extends JFrame{
         System.out.print("D = ");
         D = new Point("D",s.nextDouble(),s.nextDouble(),0, Point.USER_POINT);
         
-        LabGEO1 frame = new LabGEO1();
+        ProiectGeometrie frame = new ProiectGeometrie();
         frame.start();
     }
 }

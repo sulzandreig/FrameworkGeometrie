@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Arrays;
 import java.util.Random;
-import labgeo1.LabGEO1;
+import labgeo1.ProiectGeometrie;
 
 /**
  *
@@ -69,7 +69,7 @@ public class Line extends GeometricalObject{
             Arrays.sort(aP,null);
             if(apartineSegmenului(L, i) && apartineSegmenului(this, i)){
                 System.out.println("Segmentele se intersecteaza in "+new Point("Intersectie",x,y,0,Point.USER_POINT));
-                LabGEO1.drawingBoard.points.add(new Point("Intersectie", x,y,0,Point.USER_POINT));
+                ProiectGeometrie.drawingBoard.points.add(new Point("Intersectie", x,y,0,Point.USER_POINT));
                 return true;
             }else{
                 System.out.println("Segmentele nu se intersecteaza");
@@ -91,27 +91,27 @@ public class Line extends GeometricalObject{
                 }
                 if(apartineSegmenului(L, X) && apartineSegmenului(L, Y)){
                     System.out.println("Intersectia segmentelor este "+X + " si "+Y);
-                    LabGEO1.drawingBoard.lines.add(new Line("Intersectia",X,Y));
+                    ProiectGeometrie.drawingBoard.lines.add(new Line("Intersectia",X,Y));
                     return true;
                 }else if(apartineSegmenului(this, L.X) && apartineSegmenului(this, L.Y)){
                     System.out.println("Intersectia segmentelor este "+L.X + " si "+L.Y);
-                    LabGEO1.drawingBoard.lines.add(new Line("Intersectia",L.X,L.Y));
+                    ProiectGeometrie.drawingBoard.lines.add(new Line("Intersectia",L.X,L.Y));
                     return true;
                 }else if(apartineSegmenului(L, X) && !apartineSegmenului(L, Y) && apartineSegmenului(this, L.X)){
                     System.out.println("Intersectia segmentelor este "+X + " si "+L.X);
-                    LabGEO1.drawingBoard.lines.add(new Line("Intersectia",X,L.X));
+                    ProiectGeometrie.drawingBoard.lines.add(new Line("Intersectia",X,L.X));
                     return true;
                 }else if(apartineSegmenului(L, X) && !apartineSegmenului(L, Y) && apartineSegmenului(this, L.Y)){
                     System.out.println("Intersectia segmentelor este "+X + " si "+L.Y);
-                    LabGEO1.drawingBoard.lines.add(new Line("Intersectia",X,L.Y));
+                    ProiectGeometrie.drawingBoard.lines.add(new Line("Intersectia",X,L.Y));
                     return true;
                 }else if(!apartineSegmenului(L, X) && apartineSegmenului(L, Y) && apartineSegmenului(this, L.X)){
                     System.out.println("Intersectia segmentelor este "+Y + " si "+L.X);
-                    LabGEO1.drawingBoard.lines.add(new Line("Intersectia",Y,L.X));
+                    ProiectGeometrie.drawingBoard.lines.add(new Line("Intersectia",Y,L.X));
                     return true;
                 }else if(!apartineSegmenului(L, X) && apartineSegmenului(L, Y) && apartineSegmenului(this, L.Y)){
                     System.out.println("Intersectia segmentelor este "+Y + " si "+L.Y);
-                    LabGEO1.drawingBoard.lines.add(new Line("Intersectia",Y,L.Y));
+                    ProiectGeometrie.drawingBoard.lines.add(new Line("Intersectia",Y,L.Y));
                     return true;
                 }
             }

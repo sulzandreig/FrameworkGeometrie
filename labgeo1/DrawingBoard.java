@@ -24,8 +24,8 @@ public class DrawingBoard extends JPanel{
     public ArrayList<Quadrilateral> quadrilaters;
     public ArrayList<Triangle> triangles;
     public int zoom;
-    public int centerX = LabGEO1.width/2;
-    public int centerY = LabGEO1.height/2;
+    public int centerX = ProiectGeometrie.width/2;
+    public int centerY = ProiectGeometrie.height/2;
     public int width;
     public int height;
     public BasicStroke dashedStroke;

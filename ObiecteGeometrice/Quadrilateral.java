@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Random;
-import labgeo1.LabGEO1;
+import labgeo1.ProiectGeometrie;
 
 /**
  *
@@ -94,17 +94,17 @@ public class Quadrilateral extends GeometricalObject{
                     Triangle t2 = new Triangle(points.get(l), points.get(j), M);
                     Triangle t3 = new Triangle(points.get(i), points.get(l), M);
                     if(ariaTMare == t1.getArea()+t2.getArea()+t3.getArea()){
-                        LabGEO1.drawingBoard.triangles.add(t1);
-                        LabGEO1.drawingBoard.triangles.add(t2);
-                        LabGEO1.drawingBoard.triangles.add(t3);
-                        LabGEO1.drawingBoard.points.add(M);
+                        ProiectGeometrie.drawingBoard.triangles.add(t1);
+                        ProiectGeometrie.drawingBoard.triangles.add(t2);
+                        ProiectGeometrie.drawingBoard.triangles.add(t3);
+                        ProiectGeometrie.drawingBoard.points.add(M);
                         return true;
                     }
                 }
             }
         }
-        LabGEO1.drawingBoard.quadrilaters.add(this);
-        LabGEO1.drawingBoard.points.add(M);
+        ProiectGeometrie.drawingBoard.quadrilaters.add(this);
+        ProiectGeometrie.drawingBoard.points.add(M);
         return false;
     }
     
