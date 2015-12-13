@@ -93,6 +93,12 @@ public class VectorGeo extends GeometricalObject{
         return cosAngle;
     }
     
+    public double crossProduct(VectorGeo vector){
+        double product = this.norm()*vector.norm()*Math.sin(this.angle(vector));
+        System.out.println(product);
+        return product;
+    }
+    
     /**
      * Use only in 2 dimensions(x & y)
      * @param vector

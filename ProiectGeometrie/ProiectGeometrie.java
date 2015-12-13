@@ -7,6 +7,7 @@ package ProiectGeometrie;
 
 import ObiecteGeometrice.Point;
 import ObiecteGeometrice.Triangle;
+import ObiecteGeometrice.VectorGeo;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.util.Scanner;
@@ -82,10 +83,24 @@ public class ProiectGeometrie extends JFrame{
         D = new Point("D",s.nextDouble(),s.nextDouble(),0, Point.USER_POINT);
         Triangle t = new Triangle(A,B,C);
         if(t.contains(D) == true )
-            System.out.print("Point D is inside");
+            System.out.println("Point D is inside");
         else
-            System.out.print("Point D is not inside");
+            System.out.println("Point D is not inside");
+        VectorGeo AB = new VectorGeo(A, B);
+        VectorGeo CA = new VectorGeo(C, A);
+        if(AB.crossProduct(CA) > 0){
+            System.out.println("Viraj stanga");
+        }else{
+            System.out.println("Viraj dreapta");
+        }
         ProiectGeometrie frame = new ProiectGeometrie();
+        drawingBoard.triangles.add(t);
+        drawingBoard.points.add(D);
+        /*drawingBoard.points.add(A);
+        drawingBoard.points.add(B);
+        drawingBoard.points.add(C);
+        drawingBoard.vectors.add(AB);
+        drawingBoard.vectors.add(CA);*/
         frame.start();
     }
 }
