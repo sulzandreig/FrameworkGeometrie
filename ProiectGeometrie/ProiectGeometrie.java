@@ -6,6 +6,7 @@
 package ProiectGeometrie;
 
 import ObiecteGeometrice.Point;
+import ObiecteGeometrice.Triangle;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.util.Scanner;
@@ -79,7 +80,11 @@ public class ProiectGeometrie extends JFrame{
         C = new Point("C",s.nextDouble(),s.nextDouble(),0, Point.USER_POINT);
         System.out.print("D = ");
         D = new Point("D",s.nextDouble(),s.nextDouble(),0, Point.USER_POINT);
-        
+        Triangle t = new Triangle(A,B,C);
+        if(t.contains(D) == true )
+            System.out.print("Point D is inside");
+        else
+            System.out.print("Point D is not inside");
         ProiectGeometrie frame = new ProiectGeometrie();
         frame.start();
     }
