@@ -86,11 +86,19 @@ public class Poligon extends GeometricalObject{
         This function returns the triangles from the triangulation
     */
     public Triangle[] weakEarCuttingTriangulation(){
-        /*
-            Here goes the code...
-        */
-        return null;
         
+        while(remainingPoints > 3){
+            for(int i = 1 ; i<= remainingPoints-2 && remainingPoints>3;){
+                if(canErase(i,i+1,i+2)){
+                   addTriangle(i,i+1,i+2);
+                    erasePoint(i+1); 
+                }
+                else
+                    i++;
+            }
+        }
+         addTriangle(1,2,3);
+        return mTriangles;
     }
     
     
