@@ -29,6 +29,14 @@ public class Point extends GeometricalObject implements Comparable<Point>{
     public double z;
     public int tip;
     public Color color;
+    public Point(Point p){
+        this.x = p.x;
+        this.y = p.y;
+        this.z = p.z;
+        this.name = p.name;
+        this.tip = p.tip;
+        this.color = p.color;
+    }
     public Point(String name,double x, double y, double z, int tip){
         this.x = x;
         this.y = -y;
