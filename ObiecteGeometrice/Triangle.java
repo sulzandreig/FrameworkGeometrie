@@ -10,6 +10,7 @@ public class Triangle extends GeometricalObject{
     ArrayList<Point> points;
     ArrayList<Line> lines;
     Color color;
+    double epsilon =1e-10;
     public Triangle(Point A, Point B, Point C){
         points = new ArrayList<>();
         lines = new ArrayList<>();
@@ -76,7 +77,20 @@ public class Triangle extends GeometricalObject{
         });
         graphics.setColor(previousColor);
     }
-    
+    /*
+        Function contains tells us if the point recived as parameter is inside the triangle
+    */
+    public boolean contains(Point A)
+    {
+        double areaWithPointA = 0;
+        Line AB = new Line("AB",points.get(0),points.get(1));
+        areaWithPointA += Math.abs(AB.getDeter(A));
+        Line BC = new Line("BC",points.get(1),points.get(2));
+        areaWithPointA += Math.abs(BC.getDeter(A));
+        Line AC = new Line("AC",points.get(0),points.get(2));
+        areaWithPointA += Math.abs(AC.getDeter(A));
+        return ( Math.abs(areaWithPointA - Math.abs(getArea())) <= epsilon);
+    }
     @Override
     public String toString(){
         String s = "";
