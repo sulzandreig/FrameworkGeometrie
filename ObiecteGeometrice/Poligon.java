@@ -53,6 +53,20 @@ public class Poligon extends GeometricalObject{
             mPoints[i] =  new Point(points[i]);
     }
     /*
+        This functions tells us if Point p[j] can be erased (if it's an ear and the triangle p[i],p[j],p[j] doesn't contain any other poligon point inside
+        it
+    */
+    boolean canErase(int i, int j, int k){
+        boolean ok = true;
+        ok = mPoints[k].isLeftTurn(mPoints[i],mPoints[k]);
+        for(int left = 1;  left <= remainingPoints;  left++){
+            Triangle temp = new Triangle(mPoints[i],mPoints[j],mPoints[k]);
+            if( left != i && left != j && left != k && temp.contains(mPoints[left]))
+                ok = false;
+        }
+        return ok;
+    }
+    /*
         This function shifts with 1 position to the left all the points from
         position pos+1 to remainingPoints
     */

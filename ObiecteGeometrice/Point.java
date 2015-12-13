@@ -50,6 +50,13 @@ public class Point extends GeometricalObject implements Comparable<Point>{
             color = Color.BLACK;
         }
     }
+    /*
+        This function is used bye the weak poligon triangulation and will be modified later of deleted
+    */
+    public boolean isLeftTurn(Point P, Point Q){
+        return     ( (Q.x * this.y + P.x * Q.y + this.x * P.y -
+                     Q.x * P.y -Q.y * this.x - P.x * this.y)>0);
+    }
     
     @Override
     public void draw(Graphics2D graphics, int centrulX, int centrulY, int zoom, boolean drawName){
