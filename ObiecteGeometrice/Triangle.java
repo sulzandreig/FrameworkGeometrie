@@ -91,6 +91,9 @@ public class Triangle extends GeometricalObject{
         areaWithPointA += Math.abs(AC.getDeter(A));
         return ( Math.abs(areaWithPointA - Math.abs(getArea())) <= epsilon);
     }
+    public void displayPoints(){
+        System.out.print("A("+points.get(0).x+","+points.get(0).y+" B("+points.get(1).x+","+points.get(1).y+") C("+points.get(2).x+","+points.get(2).y+")");
+    }
     @Override
     public String toString(){
         String s = "";

@@ -15,6 +15,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import java.io.*;
+import ObiecteGeometrice.Poligon;
 
 /**
  *
@@ -51,7 +53,6 @@ public class ProiectGeometrie extends JFrame{
             Logger.getLogger(ProiectGeometrie.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
     public void start(){
         boolean exit = false;
         while(!exit){
@@ -68,10 +69,42 @@ public class ProiectGeometrie extends JFrame{
             
         }
     }
-
+    static void triangulate() throws CloneNotSupportedException{
+        Scanner fs = null;
+        try
+        {
+            fs = new Scanner(new File("poligon.in"));
+        }
+        catch(FileNotFoundException fnf)
+        {
+            System.out.print("Fisier inexistent");
+        }
+        int n = fs.nextInt();
+        double x,y;
+        Point p = new Point("p",0,0,0,0);
+        Point []poligon = new Point[n+2];
+        for(int i = 1 ; i <= n ; i ++){
+            x = fs.nextDouble();
+            y = fs.nextDouble();
+            p.x = x;
+            p.y = y;
+            poligon[i] = p.clone();
+        }
+        poligon[n+1] = poligon[1].clone();
+        Poligon P = new Poligon(poligon,n);
+        Triangle []triangles;
+        triangles = P.weakEarCuttingTriangulation();
+        for(int i = 1 ; i <= n-2 ; i ++){
+            System.out.print("Triunghiul "+i+" are punctele :");
+            triangles[i].displayPoints();
+            System.out.print("\n");
+        }
+    }
     
     public static void main(String[] args) throws CloneNotSupportedException {
         Scanner s = new Scanner(System.in);
+        triangulate();
+        
         Point A,B,C,D,M;
         System.out.print("A = ");
         A = new Point("A",s.nextDouble(),s.nextDouble(),0, Point.USER_POINT);
@@ -82,8 +115,14 @@ public class ProiectGeometrie extends JFrame{
         System.out.print("D = ");
         D = new Point("D",s.nextDouble(),s.nextDouble(),0, Point.USER_POINT);
         ProiectGeometrie frame = new ProiectGeometrie();
-        System.out.println(D.clone());
-        drawingBoard.points.add(D.clone());
+        Triangle t = new Triangle(A, B, C);
+        drawingBoard.triangles.add(t);
+        drawingBoard.points.add(D);
+        /*drawingBoard.points.add(A);
+        drawingBoard.points.add(B);
+        drawingBoard.points.add(C);
+        drawingBoard.vectors.add(AB);
+        drawingBoard.vectors.add(CA);*/
         frame.start();
     }
 }

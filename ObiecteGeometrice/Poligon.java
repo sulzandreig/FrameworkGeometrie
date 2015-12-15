@@ -58,7 +58,7 @@ public class Poligon extends GeometricalObject{
     */
     boolean canErase(int i, int j, int k){
         boolean ok = true;
-        ok = mPoints[k].isLeftTurn(mPoints[i],mPoints[k]);
+        ok = mPoints[k].isLeftTurn(mPoints[i],mPoints[j]);
         for(int left = 1;  left <= remainingPoints;  left++){
             Triangle temp = new Triangle(mPoints[i],mPoints[j],mPoints[k]);
             if( left != i && left != j && left != k && temp.contains(mPoints[left]))
