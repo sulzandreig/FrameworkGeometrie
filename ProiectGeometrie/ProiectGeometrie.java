@@ -92,37 +92,21 @@ public class ProiectGeometrie extends JFrame{
         }
         poligon[n+1] = poligon[1].clone();
         Poligon P = new Poligon(poligon,n);
+        Poligon P2 = new Poligon(poligon,n);
+        //drawingBoard.poligons.add(P2);
         Triangle []triangles;
         triangles = P.weakEarCuttingTriangulation();
         for(int i = 1 ; i <= n-2 ; i ++){
             System.out.print("Triunghiul "+i+" are punctele :");
-            triangles[i].displayPoints();
+            System.out.println(triangles[i]);
+            drawingBoard.triangles.add(triangles[i]);
             System.out.print("\n");
         }
     }
     
     public static void main(String[] args) throws CloneNotSupportedException {
-        Scanner s = new Scanner(System.in);
-        triangulate();
-        
-        Point A,B,C,D,M;
-        System.out.print("A = ");
-        A = new Point("A",s.nextDouble(),s.nextDouble(),0, Point.USER_POINT);
-        System.out.print("B = ");
-        B = new Point("B",s.nextDouble(),s.nextDouble(),0, Point.USER_POINT);
-        System.out.print("C = ");
-        C = new Point("C",s.nextDouble(),s.nextDouble(),0, Point.USER_POINT);
-        System.out.print("D = ");
-        D = new Point("D",s.nextDouble(),s.nextDouble(),0, Point.USER_POINT);
         ProiectGeometrie frame = new ProiectGeometrie();
-        Triangle t = new Triangle(A, B, C);
-        drawingBoard.triangles.add(t);
-        drawingBoard.points.add(D);
-        /*drawingBoard.points.add(A);
-        drawingBoard.points.add(B);
-        drawingBoard.points.add(C);
-        drawingBoard.vectors.add(AB);
-        drawingBoard.vectors.add(CA);*/
+        triangulate();
         frame.start();
     }
 }

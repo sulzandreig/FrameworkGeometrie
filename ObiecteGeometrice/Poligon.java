@@ -45,6 +45,7 @@ public class Poligon extends GeometricalObject{
         Added constructor that accepts a Point array and a size used for weak triangulation
     */
     public Poligon(Point[] points,int size) throws CloneNotSupportedException{
+        
         mTriangles = new Triangle[size];
         triNr = 0 ;
         mPoints = new Point[size+1];
@@ -57,7 +58,7 @@ public class Poligon extends GeometricalObject{
         it
     */
     boolean canErase(int i, int j, int k){
-        boolean ok = true;
+        boolean ok;
         ok = mPoints[k].isLeftTurn(mPoints[i],mPoints[j]);
         for(int left = 1;  left <= remainingPoints;  left++){
             Triangle temp = new Triangle(mPoints[i],mPoints[j],mPoints[k]);
@@ -97,7 +98,7 @@ public class Poligon extends GeometricalObject{
                     i++;
             }
         }
-         addTriangle(1,2,3);
+        addTriangle(1,2,3);
         return mTriangles;
     }
     

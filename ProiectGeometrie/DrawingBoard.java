@@ -3,6 +3,7 @@ package ProiectGeometrie;
 import ObiecteGeometrice.Quadrilateral;
 import ObiecteGeometrice.Line;
 import ObiecteGeometrice.Point;
+import ObiecteGeometrice.Poligon;
 import ObiecteGeometrice.VectorGeo;
 import ObiecteGeometrice.Triangle;
 import java.awt.BasicStroke;
@@ -22,6 +23,7 @@ public class DrawingBoard extends JPanel{
     public ArrayList<VectorGeo> vectors;
     public ArrayList<Line> lines;
     public ArrayList<Quadrilateral> quadrilaters;
+    public ArrayList<Poligon> poligons;
     public ArrayList<Triangle> triangles;
     private final int zoom;
     private final int centerX = ProiectGeometrie.width/2;
@@ -48,6 +50,7 @@ public class DrawingBoard extends JPanel{
         lines = new ArrayList<>();
         quadrilaters = new ArrayList<>();
         triangles = new ArrayList<>();
+        poligons = new ArrayList<>();
     }
     
     public void repaint(Graphics gra){
@@ -91,6 +94,12 @@ public class DrawingBoard extends JPanel{
         if(quadrilaters != null){
             quadrilaters.stream().forEach((patrulater) -> {
                 patrulater.draw(g, centerX, centerY, zoom, true);
+            });
+        }
+        g.setColor(Color.ORANGE);
+        if(poligons != null){
+            poligons.stream().forEach((p) -> {
+                p.draw(g, centerX, centerY, zoom, true);
             });
         }
         g.setColor(Color.BLUE);
