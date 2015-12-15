@@ -29,6 +29,9 @@ public class Point extends GeometricalObject implements Comparable<Point>{
     public double z;
     public int tip;
     public Color color;
+    public Point(){
+        
+    }
     public Point(Point p){
         this.x = p.x;
         this.y = p.y;
