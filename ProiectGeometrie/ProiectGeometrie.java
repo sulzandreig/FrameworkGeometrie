@@ -6,7 +6,6 @@
 package ProiectGeometrie;
 
 import ObiecteGeometrice.Point;
-import ObiecteGeometrice.Triangle;
 import java.awt.BorderLayout;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -15,7 +14,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import java.io.*;
 import ObiecteGeometrice.Poligon;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
@@ -24,7 +22,6 @@ import java.util.LinkedList;
  */
 public class ProiectGeometrie extends JFrame{
     public static DrawingBoard drawingBoard;
-    public JButton exit;
     public static int width = 600;
     public static int height = 600;
     public static int zoom = 30;

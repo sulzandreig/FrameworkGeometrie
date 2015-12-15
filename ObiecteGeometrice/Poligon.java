@@ -110,4 +110,12 @@ public class Poligon extends GeometricalObject{
         graphics.setColor(previousColor);
     }
     
+    public ArrayList<Point> getPoints() throws CloneNotSupportedException{
+        ArrayList<Point> copyPoints = new ArrayList<>();
+        for(Point p:points){
+            copyPoints.add(p.clone());
+        }
+        return copyPoints;
+    }
+    
 }
