@@ -44,13 +44,13 @@ public class Poligon extends GeometricalObject{
     /*
         Added constructor that accepts a Point array and a size used for weak triangulation
     */
-    public Poligon(Point[] points,int size){
+    public Poligon(Point[] points,int size) throws CloneNotSupportedException{
         mTriangles = new Triangle[size];
         triNr = 0 ;
         mPoints = new Point[size+1];
         remainingPoints = size;
         for(int i = 1 ; i <= size ; i++)
-            mPoints[i] =  new Point(points[i]);
+            mPoints[i] =  points[i].clone();
     }
     /*
         This functions tells us if Point p[j] can be erased (if it's an ear and the triangle p[i],p[j],p[j] doesn't contain any other poligon point inside

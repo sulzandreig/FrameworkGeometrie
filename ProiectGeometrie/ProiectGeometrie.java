@@ -70,7 +70,7 @@ public class ProiectGeometrie extends JFrame{
     }
 
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CloneNotSupportedException {
         Scanner s = new Scanner(System.in);
         Point A,B,C,D,M;
         System.out.print("A = ");
@@ -81,26 +81,9 @@ public class ProiectGeometrie extends JFrame{
         C = new Point("C",s.nextDouble(),s.nextDouble(),0, Point.USER_POINT);
         System.out.print("D = ");
         D = new Point("D",s.nextDouble(),s.nextDouble(),0, Point.USER_POINT);
-        Triangle t = new Triangle(A,B,C);
-        if(t.contains(D) == true )
-            System.out.println("Point D is inside");
-        else
-            System.out.println("Point D is not inside");
-        VectorGeo AB = new VectorGeo(A, B);
-        VectorGeo CA = new VectorGeo(C, A);
-        if(AB.crossProduct(CA) > 0){
-            System.out.println("Viraj stanga");
-        }else{
-            System.out.println("Viraj dreapta");
-        }
         ProiectGeometrie frame = new ProiectGeometrie();
-        drawingBoard.triangles.add(t);
-        drawingBoard.points.add(D);
-        /*drawingBoard.points.add(A);
-        drawingBoard.points.add(B);
-        drawingBoard.points.add(C);
-        drawingBoard.vectors.add(AB);
-        drawingBoard.vectors.add(CA);*/
+        System.out.println(D.clone());
+        drawingBoard.points.add(D.clone());
         frame.start();
     }
 }

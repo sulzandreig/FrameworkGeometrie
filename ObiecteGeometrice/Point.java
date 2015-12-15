@@ -9,14 +9,13 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Random;
 
 /**
  *
  * @author Dragos-Alexandru
  */
-public class Point extends GeometricalObject implements Comparable<Point>{
+public class Point extends GeometricalObject implements Comparable<Point>, Cloneable{
     private final static int USER_POINT_SIZE = 4;
     public final static int AXIS_POINT_X = 0;
     public final static int AXIS_POINT_Y = 1;
@@ -29,14 +28,6 @@ public class Point extends GeometricalObject implements Comparable<Point>{
     public double z;
     public int tip;
     public Color color;
-    public Point(Point p){
-        this.x = p.x;
-        this.y = p.y;
-        this.z = p.z;
-        this.name = p.name;
-        this.tip = p.tip;
-        this.color = p.color;
-    }
     public Point(String name,double x, double y, double z, int tip){
         this.x = x;
         this.y = -y;
@@ -174,6 +165,7 @@ public class Point extends GeometricalObject implements Comparable<Point>{
         return hash;
     }
     
+    
     @Override
     public String toString(){
         return "("+x+","+(-y)+","+z+")";
@@ -184,6 +176,12 @@ public class Point extends GeometricalObject implements Comparable<Point>{
         if(o.x == this.x)
             return (int)(this.y - o.y);
         return (int)(this.x - o.x);
+    }
+
+    @Override
+    public Point clone() throws CloneNotSupportedException{
+        Point p = (Point) super.clone();
+        return p;
     }
 }
 
