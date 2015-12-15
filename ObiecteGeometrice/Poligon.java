@@ -7,6 +7,7 @@ package ObiecteGeometrice;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -17,22 +18,26 @@ import java.util.Random;
 public class Poligon extends GeometricalObject{
     String name;
     LinkedList<Point> points;
+    LinkedList<Point> tempPoints;
     LinkedList<Line> lines;
     Color color;
     //Begining for data to test weak triangulation 
-    Triangle mTriangles[];
-    Point [] mPoints;
-    int remainingPoints;
-    int triNr;
+    ArrayList<Triangle> triangles;
     
     //End of data 
-    public Poligon(LinkedList<Point> points){
-        this.points = points;
+    public Poligon(LinkedList<Point> points) throws CloneNotSupportedException{
         points.add(points.get(0));
+        this.points = new LinkedList<>();
+        for(Point p:points){
+            this.points.add(p.clone());
+        }
+        triangles = new ArrayList<>();
+        lines = new LinkedList<>();
+        name = "";
         color = new Color(new Random().nextInt(255), new Random().nextInt(255), new Random().nextInt(255));
         for(int i = 0; i<points.size()-1;i++){
-            name = "" + points.get(i);
-            lines.add(new Line(points.get(i).name+points.get(i+1), points.get(i), points.get(i+1)));
+            name = name + points.get(i).name;
+            lines.add(new Line(points.get(i).name+points.get(i+1).name, points.get(i), points.get(i+1)));
         }
         points.stream().forEach((p) -> {
            p.color = color;
@@ -42,27 +47,15 @@ public class Poligon extends GeometricalObject{
         });
     }
     /*
-        Added constructor that accepts a Point array and a size used for weak triangulation
-    */
-    public Poligon(Point[] points,int size) throws CloneNotSupportedException{
-        
-        mTriangles = new Triangle[size];
-        triNr = 0 ;
-        mPoints = new Point[size+1];
-        remainingPoints = size;
-        for(int i = 1 ; i <= size ; i++)
-            mPoints[i] =  points[i].clone();
-    }
-    /*
         This functions tells us if Point p[j] can be erased (if it's an ear and the triangle p[i],p[j],p[j] doesn't contain any other poligon point inside
         it
     */
-    boolean canErase(int i, int j, int k){
+    private boolean canErase(int i, int j, int k){
         boolean ok;
-        ok = mPoints[k].isLeftTurn(mPoints[i],mPoints[j]);
-        for(int left = 1;  left <= remainingPoints;  left++){
-            Triangle temp = new Triangle(mPoints[i],mPoints[j],mPoints[k]);
-            if( left != i && left != j && left != k && temp.contains(mPoints[left]))
+        ok = tempPoints.get(k).isLeftTurn(tempPoints.get(i),tempPoints.get(j));
+        for(int left = 0;  left < tempPoints.size();  left++){
+            Triangle temp = new Triangle(tempPoints.get(i),tempPoints.get(j),tempPoints.get(k));
+            if( left != i && left != j && left != k && temp.contains(tempPoints.get(left)))
                 ok = false;
         }
         return ok;
@@ -71,35 +64,36 @@ public class Poligon extends GeometricalObject{
         This function shifts with 1 position to the left all the points from
         position pos+1 to remainingPoints
     */
-    void erasePoint(int pos){
-        for(int i = pos ; i < remainingPoints ; i++)
-            mPoints[i] = mPoints[i+1];
-        remainingPoints--;
+    private void erasePoint(int pos){
+        tempPoints.remove(pos);
     }
     /*
         This function adds the triangle formed by the Points mPoints[i],
         mPonts[j],mPoints[k] to the return list of triangles
     */
-    void addTriangle(int i, int j, int k){
-        mTriangles[ ++ triNr] = new Triangle(mPoints[i],mPoints[j],mPoints[k]);
+    private void addTriangle(int i, int j, int k){
+        triangles.add(new Triangle(tempPoints.get(i),tempPoints.get(j),tempPoints.get(k)));
     }
     /*
         This function returns the triangles from the triangulation
     */
-    public Triangle[] weakEarCuttingTriangulation(){
-        
-        while(remainingPoints > 3){
-            for(int i = 1 ; i<= remainingPoints-2 && remainingPoints>3;){
+    public ArrayList<Triangle> weakEarCuttingTriangulation() throws CloneNotSupportedException{
+        tempPoints = new LinkedList<>();
+        for(Point p:points){
+            tempPoints.add(p.clone());
+        }
+        while(tempPoints.size() > 4){
+            for(int i = 0 ; i < tempPoints.size()-2 && tempPoints.size()>4;){
                 if(canErase(i,i+1,i+2)){
                    addTriangle(i,i+1,i+2);
-                    erasePoint(i+1); 
+                   erasePoint(i+1); 
                 }
                 else
                     i++;
             }
         }
-        addTriangle(1,2,3);
-        return mTriangles;
+        addTriangle(0,1,2);
+        return triangles;
     }
     
     

@@ -7,9 +7,7 @@ package ProiectGeometrie;
 
 import ObiecteGeometrice.Point;
 import ObiecteGeometrice.Triangle;
-import ObiecteGeometrice.VectorGeo;
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,6 +15,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import java.io.*;
 import ObiecteGeometrice.Poligon;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  *
@@ -36,15 +36,7 @@ public class ProiectGeometrie extends JFrame{
         this.setLayout(new BorderLayout());
         this.setResizable(false);
         drawingBoard = new DrawingBoard(width,height,zoom);
-        exit = new JButton("Exit");
-        exit.addActionListener((ActionEvent e) -> {
-            if (exit.getParent().getParent().getParent().getParent() instanceof ProiectGeometrie) {
-                ProiectGeometrie parent1 = (ProiectGeometrie)exit.getParent().getParent().getParent().getParent();
-                parent1.dispose();
-            }
-        });
         this.add(drawingBoard,BorderLayout.CENTER);
-        this.add(exit,BorderLayout.SOUTH);
         //this.setUndecorated(true);
         this.setVisible(true);
         try {
@@ -69,44 +61,19 @@ public class ProiectGeometrie extends JFrame{
             
         }
     }
-    static void triangulate() throws CloneNotSupportedException{
-        Scanner fs = null;
-        try
-        {
-            fs = new Scanner(new File("poligon.in"));
-        }
-        catch(FileNotFoundException fnf)
-        {
-            System.out.print("Fisier inexistent");
-        }
-        int n = fs.nextInt();
-        double x,y;
-        Point p = new Point("p",0,0,0,0);
-        Point []poligon = new Point[n+2];
-        for(int i = 1 ; i <= n ; i ++){
-            x = fs.nextDouble();
-            y = fs.nextDouble();
-            p.x = x;
-            p.y = y;
-            poligon[i] = p.clone();
-        }
-        poligon[n+1] = poligon[1].clone();
-        Poligon P = new Poligon(poligon,n);
-        Poligon P2 = new Poligon(poligon,n);
-        //drawingBoard.poligons.add(P2);
-        Triangle []triangles;
-        triangles = P.weakEarCuttingTriangulation();
-        for(int i = 1 ; i <= n-2 ; i ++){
-            System.out.print("Triunghiul "+i+" are punctele :");
-            System.out.println(triangles[i]);
-            drawingBoard.triangles.add(triangles[i]);
-            System.out.print("\n");
-        }
-    }
     
-    public static void main(String[] args) throws CloneNotSupportedException {
+    public static void main(String[] args) throws CloneNotSupportedException, FileNotFoundException {
         ProiectGeometrie frame = new ProiectGeometrie();
-        triangulate();
+        Scanner fs;
+        fs = new Scanner(new File("poligon.in"));
+        int n = fs.nextInt();
+        LinkedList<Point> pointsInPoligon = new LinkedList<>();
+        for(int i = 0 ; i < n ; i ++){
+            pointsInPoligon.add(new Point(fs.next(), fs.nextDouble(), fs.nextDouble(), 0, Point.USER_POINT));
+        }
+        Poligon P = new Poligon((LinkedList<Point>) pointsInPoligon.clone());
+        drawingBoard.poligons.add(P);
+        drawingBoard.triangles = P.weakEarCuttingTriangulation();
         frame.start();
     }
 }
