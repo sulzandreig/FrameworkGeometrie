@@ -66,7 +66,7 @@ public class ProiectGeometrie extends JFrame{
         int n = fs.nextInt();
         LinkedList<Point> pointsInPoligon = new LinkedList<>();
         for(int i = 0 ; i < n ; i ++){
-            pointsInPoligon.add(new Point("", fs.nextDouble(), fs.nextDouble(), 0, Point.USER_POINT));
+            pointsInPoligon.add(new Point(fs.next(), fs.nextDouble(), fs.nextDouble(), 0, Point.USER_POINT));
         }
         Poligon P = new Poligon((LinkedList<Point>) pointsInPoligon.clone());
         drawingBoard.poligons.add(P);
