@@ -94,11 +94,8 @@ public class ProiectGeometrie extends JFrame{
         Poligon P = new Poligon(poligon,n);
         Triangle []triangles;
         triangles = P.weakEarCuttingTriangulation();
-        for(int i = 1 ; i <= n-2 ; i ++){
-            System.out.print("Triunghiul "+i+" are punctele :");
-            triangles[i].displayPoints();
-            System.out.print("\n");
-        }
+        for(int i = 1 ; i <= n-2 ; i ++)
+            System.out.print(triangles[i].toString()+"\n");
     }
     
     public static void main(String[] args) {
