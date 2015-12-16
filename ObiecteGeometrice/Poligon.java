@@ -53,7 +53,7 @@ public class Poligon extends GeometricalObject{
     private boolean canErase(int i, int j, int k){
         boolean ok;
         ok = tempPoints.get(k).isLeftTurn(tempPoints.get(i),tempPoints.get(j));
-        for(int left = 0;  left < tempPoints.size();  left++){
+        for(int left = 0;  left < tempPoints.size()-1;  left++){
             Triangle temp = new Triangle(tempPoints.get(i),tempPoints.get(j),tempPoints.get(k));
             if( left != i && left != j && left != k && temp.contains(tempPoints.get(left)))
                 ok = false;
@@ -82,6 +82,7 @@ public class Poligon extends GeometricalObject{
         for(Point p:points){
             tempPoints.add(p.clone());
         }
+        
         while(tempPoints.size() > 4){
             for(int i = 0 ; i < tempPoints.size()-2 && tempPoints.size()>4;){
                 if(canErase(i,i+1,i+2)){

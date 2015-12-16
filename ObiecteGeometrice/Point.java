@@ -30,7 +30,7 @@ public class Point extends GeometricalObject implements Comparable<Point>, Clone
     public Color color;
     public Point(String name,double x, double y, double z, int tip){
         this.x = x;
-        this.y = -y;
+        this.y = -y;        //aici y nu trebuie sa fie negativ
         this.z = z;
         this.name = name;
         this.tip = tip;
@@ -46,7 +46,7 @@ public class Point extends GeometricalObject implements Comparable<Point>, Clone
     */
     public boolean isLeftTurn(Point P, Point Q){
         return     ( (Q.x * this.y + P.x * Q.y + this.x * P.y -
-                     Q.x * P.y -Q.y * this.x - P.x * this.y)<0);
+                     Q.x * P.y -Q.y * this.x - P.x * this.y)>0);
     }
     
     @Override
