@@ -73,6 +73,7 @@ public class Poligon extends GeometricalObject{
     */
     private void addTriangle(int i, int j, int k){
         triangles.add(new Triangle(tempPoints.get(i),tempPoints.get(j),tempPoints.get(k)));
+        //System.out.println(triangles.get(triangles.size()-1));
     }
     /*
         This function returns the triangles from the triangulation
@@ -85,6 +86,7 @@ public class Poligon extends GeometricalObject{
         
         while(tempPoints.size() > 4){
             for(int i = 0 ; i < tempPoints.size()-2 && tempPoints.size()>4;){
+                //System.out.println(tempPoints.get(i)+" "+tempPoints.get(i+1)+" "+tempPoints.get(i+2)+" ");
                 if(canErase(i,i+1,i+2)){
                    addTriangle(i,i+1,i+2);
                    erasePoint(i+1); 

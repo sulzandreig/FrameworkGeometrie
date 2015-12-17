@@ -10,7 +10,6 @@ import java.awt.BorderLayout;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import java.io.*;
 import ObiecteGeometrice.Poligon;
@@ -24,7 +23,7 @@ public class ProiectGeometrie extends JFrame{
     public static DrawingBoard drawingBoard;
     public static int width = 600;
     public static int height = 600;
-    public static int zoom = 30;
+    public static int zoom = 20;
     public ProiectGeometrie(){
         super("LabGeo");
         this.setSize(600,600);
@@ -55,14 +54,14 @@ public class ProiectGeometrie extends JFrame{
             }else{
                 exit = true;
             }
-            
+            exit = true;
         }
     }
     
     public static void main(String[] args) throws CloneNotSupportedException, FileNotFoundException {
         ProiectGeometrie frame = new ProiectGeometrie();
         Scanner fs;
-        fs = new Scanner(new File("poligon.in"));
+        fs = new Scanner(new File("poligon2.in"));
         int n = fs.nextInt();
         LinkedList<Point> pointsInPoligon = new LinkedList<>();
         for(int i = 0 ; i < n ; i ++){
