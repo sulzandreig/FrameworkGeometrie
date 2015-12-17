@@ -60,8 +60,15 @@ public class ProiectGeometrie extends JFrame{
     
     public static void main(String[] args) throws CloneNotSupportedException, FileNotFoundException {
         ProiectGeometrie frame = new ProiectGeometrie();
-        Scanner fs;
-        fs = new Scanner(new File("poligon2.in"));
+        Scanner fs = null;
+        try
+        {
+            fs = new Scanner(new File("poligon2.in"));
+        }
+        catch(FileNotFoundException fnf)
+        {
+            System.out.print("Fisier inexistent");
+        }
         int n = fs.nextInt();
         LinkedList<Point> pointsInPoligon = new LinkedList<>();
         for(int i = 0 ; i < n ; i ++){
