@@ -5,22 +5,29 @@ import java.awt.Graphics2D;
 import java.util.Arrays;
 import java.util.Random;
 import ProiectGeometrie.ProiectGeometrie;
+import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  *
  * @author Dragos-Alexandru
  */
-public class Line extends GeometricalObject{
+public class Line extends GeometricalObject implements Cloneable{
     String name;
     Point X,Y;
     double[][] matrix;
+    public ArrayList<Triangle> triangles;
     Color color;
+    private static int nr = 0;
+    int thisNr;
     public Line(String name, Point X, Point Y){
         matrix = new double[3][];
         matrix[0] = new double[3];
         matrix[1] = new double[3];
         matrix[2] = new double[3];
         this.name = name;
+        this.thisNr = nr;
+        nr++;
         color = new Color(new Random().nextInt(255), new Random().nextInt(255), new Random().nextInt(255));
         this.X = X;
         this.X.color = color;
@@ -41,9 +48,11 @@ public class Line extends GeometricalObject{
      *  <p>Primeste o alta linie si rezolva sistemul intersectie lor</p>
      * <p>Momentan functia adauga si intersectia in drawingBoard (daca exista)</p>
      * @param L
+     * @param ignoreOriginalPoints
      * @return
      */
-    public boolean intersects(Line L){
+    public ArrayList<Point> intersects(Line L, boolean ignoreOriginalPoints){
+        ArrayList<Point> intersections = new ArrayList<>();
         double[][] mSys = new double[2][];
         mSys[0] = new double[3];
         mSys[1] = new double[3];
@@ -68,17 +77,23 @@ public class Line extends GeometricalObject{
             aP[4] = i;
             Arrays.sort(aP,null);
             if(apartineSegmenului(L, i) && apartineSegmenului(this, i)){
-                System.out.println("Segmentele se intersecteaza in "+new Point("Intersectie",x,y,0,Point.USER_POINT));
-                ProiectGeometrie.drawingBoard.points.add(new Point("Intersectie", x,y,0,Point.USER_POINT));
-                return true;
+                if(ignoreOriginalPoints){
+                    if(i.equals(L.X) || i.equals(L.Y) || i.equals(X) || i.equals(Y)){
+                        return intersections;
+                    }
+                }
+                System.out.println("Segmentele se intersecteaza in "+new Point("Inter",x,y,0,Point.USER_POINT));
+                //ProiectGeometrie.drawingBoard.points.add(new Point("Inter "+X.name+Y.name, x,y,0,Point.USER_POINT));
+                intersections.add(new Point("Inter",x, y, 0, Point.USER_POINT));
+                return intersections;
             }else{
                 System.out.println("Segmentele nu se intersecteaza");
-                return false;
+                return intersections;
             }
         }else{
             if(mSys[0][1]*mSys[1][2]-mSys[0][2]*mSys[1][1] != 0){
                 System.out.println("Segmentele sunt paralele");
-                return false;
+                return intersections;
             }else{
                 Point[] aP = new Point[4];
                 aP[0] = this.X;
@@ -91,33 +106,45 @@ public class Line extends GeometricalObject{
                 }
                 if(apartineSegmenului(L, X) && apartineSegmenului(L, Y)){
                     System.out.println("Intersectia segmentelor este "+X + " si "+Y);
-                    ProiectGeometrie.drawingBoard.lines.add(new Line("Intersectia",X,Y));
-                    return true;
+                    //ProiectGeometrie.drawingBoard.lines.add(new Line("Inter "+X+Y,X,Y));
+                    intersections.add(X);
+                    intersections.add(Y);
+                    return intersections;
                 }else if(apartineSegmenului(this, L.X) && apartineSegmenului(this, L.Y)){
                     System.out.println("Intersectia segmentelor este "+L.X + " si "+L.Y);
-                    ProiectGeometrie.drawingBoard.lines.add(new Line("Intersectia",L.X,L.Y));
-                    return true;
+                    //ProiectGeometrie.drawingBoard.lines.add(new Line("Inter "+L.X+L.Y,L.X,L.Y));
+                    intersections.add(L.X);
+                    intersections.add(L.Y);
+                    return intersections;
                 }else if(apartineSegmenului(L, X) && !apartineSegmenului(L, Y) && apartineSegmenului(this, L.X)){
                     System.out.println("Intersectia segmentelor este "+X + " si "+L.X);
-                    ProiectGeometrie.drawingBoard.lines.add(new Line("Intersectia",X,L.X));
-                    return true;
+                    //ProiectGeometrie.drawingBoard.lines.add(new Line("Inter "+X+L.X,X,L.X));
+                    intersections.add(X);
+                    intersections.add(L.X);
+                    return intersections;
                 }else if(apartineSegmenului(L, X) && !apartineSegmenului(L, Y) && apartineSegmenului(this, L.Y)){
                     System.out.println("Intersectia segmentelor este "+X + " si "+L.Y);
-                    ProiectGeometrie.drawingBoard.lines.add(new Line("Intersectia",X,L.Y));
-                    return true;
+                    //ProiectGeometrie.drawingBoard.lines.add(new Line("Inter "+X+L.Y,X,L.Y));
+                    intersections.add(X);
+                    intersections.add(L.Y);
+                    return intersections;
                 }else if(!apartineSegmenului(L, X) && apartineSegmenului(L, Y) && apartineSegmenului(this, L.X)){
                     System.out.println("Intersectia segmentelor este "+Y + " si "+L.X);
-                    ProiectGeometrie.drawingBoard.lines.add(new Line("Intersectia",Y,L.X));
-                    return true;
+                    //ProiectGeometrie.drawingBoard.lines.add(new Line("Inter "+Y+L.X,Y,L.X));
+                    intersections.add(Y);
+                    intersections.add(L.X);
+                    return intersections;
                 }else if(!apartineSegmenului(L, X) && apartineSegmenului(L, Y) && apartineSegmenului(this, L.Y)){
                     System.out.println("Intersectia segmentelor este "+Y + " si "+L.Y);
-                    ProiectGeometrie.drawingBoard.lines.add(new Line("Intersectia",Y,L.Y));
-                    return true;
+                    //ProiectGeometrie.drawingBoard.lines.add(new Line("Inter "+Y+L.Y,Y,L.Y));
+                    intersections.add(Y);
+                    intersections.add(L.Y);
+                    return intersections;
                 }
             }
         }
         System.out.println("Segmentele nu se intersecteaza");
-        return false;
+        return intersections;
     }
     
     /**
@@ -210,6 +237,24 @@ public class Line extends GeometricalObject{
         return Z.equals(X) || Z.equals(Y);
     }
     
+    /**
+     *  Returneaza valoarea abscisei ca ar avea-o punctul cu ordonata trimisa ca
+     * parametru
+     * @param x
+     * @return
+     */
+    public double getValueOf(double x){
+        double yValue;
+        yValue = ((-X.y+Y.y)/(X.x-Y.x))*(x-X.x) + X.y;
+        return yValue;
+    }
+    
+    public void setColor(Color color){
+        X.color = color;
+        Y.color = color;
+        this.color = color;
+    }
+    
     @Override
     public void draw(Graphics2D graphics,int centrulX, int centrulY, int zoom, boolean drawName){
         Color previousColor = graphics.getColor();
@@ -219,16 +264,46 @@ public class Line extends GeometricalObject{
         }
         graphics.drawLine(((int)(X.x*zoom+X.z/2*zoom))+centrulX, ((int)(X.y*zoom-X.z/2*zoom))+centrulY,
                 ((int)(Y.x*zoom+Y.z/2*zoom))+centrulX, ((int)(Y.y*zoom-Y.z/2*zoom))+centrulY);
-        X.draw(graphics, centrulX, centrulY, zoom, false);
-        Y.draw(graphics, centrulX, centrulY, zoom, false);
+        X.draw(graphics, centrulX, centrulY, zoom, true);
+        Y.draw(graphics, centrulX, centrulY, zoom, true);
         graphics.setColor(previousColor);
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 41 * hash + Objects.hashCode(this.X);
+        hash = 41 * hash + Objects.hashCode(this.Y);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Line other = (Line) obj;
+        if (!(Objects.equals(this.X, other.X) || Objects.equals(this.X, other.Y))) {
+            return false;
+        }
+        return Objects.equals(this.Y, other.Y) || Objects.equals(this.Y, other.X);
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+    
+    
     
     @Override
     public String toString(){
-        String s = "Line ecuation "+name+"\n" +"|"+matrix[0][0]+" "+matrix[0][1]+" "+matrix[0][2]+"|"
-                + "|"+matrix[1][0]+" "+matrix[1][1]+" "+matrix[1][2]+"|"
-                + "|"+matrix[2][0]+" "+matrix[2][1]+" "+matrix[2][2]+"|";
+        String s = "Line ecuation "+name+"\n" +"|"+matrix[0][0]+" "+matrix[0][1]+" "+matrix[0][2]+"|\n"
+                + "|"+matrix[1][0]+" "+matrix[1][1]+" "+matrix[1][2]+"|\n"
+                + "|"+matrix[2][0]+" "+matrix[2][1]+" "+matrix[2][2]+"|\n";
         return s;
     }
 }

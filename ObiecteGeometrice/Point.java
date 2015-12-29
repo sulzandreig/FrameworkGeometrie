@@ -21,20 +21,26 @@ public class Point extends GeometricalObject implements Comparable<Point>, Clone
     public final static int AXIS_POINT_Y = 1;
     public final static int AXIS_POINT_Z = 2;
     public final static int USER_POINT = 3;
-    public boolean hoverdOver;
     public String name;
     public double x;
     public double y;
     public double z;
     public int tip;
     public Color color;
+    public boolean isVisible = false;
+    public boolean isProccesed = false;
+    /*
+        Triangles that contain this point
+    */
+    public ArrayList<Triangle> triangles;
+    
     public Point(String name,double x, double y, double z, int tip){
-        this.x = x;
-        this.y = -y;        //aici y nu trebuie sa fie negativ
-        this.z = z;
+        this.x = Math.ceil(x*10)/10;
+        this.y = Math.floor(-y*10)/10;        //aici y nu trebuie sa fie negativ
+        this.z = Math.ceil(z*10)/10;
         this.name = name;
         this.tip = tip;
-        hoverdOver = false;
+        triangles = new ArrayList<>();
         if(tip == USER_POINT){
             color = new Color(new Random().nextInt(255), new Random().nextInt(255), new Random().nextInt(255));
         }else{

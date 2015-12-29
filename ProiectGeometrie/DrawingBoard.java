@@ -25,7 +25,8 @@ public class DrawingBoard extends JPanel{
     public ArrayList<Quadrilateral> quadrilaters;
     public ArrayList<Poligon> poligons;
     public ArrayList<Triangle> triangles;
-    private final int zoom;
+    int poligonToDraw = 0;
+    public int zoom;
     private final int centerX = ProiectGeometrie.width/2;
     private final int centerY = ProiectGeometrie.height/2;
     private final int width;
@@ -75,8 +76,8 @@ public class DrawingBoard extends JPanel{
             });
         }
         
-        g.setColor(Color.red);
         //drawing points
+        g.setColor(Color.red);
         if(points != null){
             points.stream().forEach((punct) -> {
                 punct.draw(g,centerX, centerY, zoom, true);
@@ -96,17 +97,23 @@ public class DrawingBoard extends JPanel{
                 patrulater.draw(g, centerX, centerY, zoom, true);
             });
         }
-        g.setColor(Color.ORANGE);
-        if(poligons != null){
-            poligons.stream().forEach((p) -> {
-                p.draw(g, centerX, centerY, zoom, true);
-            });
-        }
+        
         g.setColor(Color.BLUE);
         if(triangles != null){
             triangles.stream().forEach((triunghi) -> {
                 triunghi.draw(g, centerX, centerY, zoom, true);
             });
+        }
+        
+        g.setColor(Color.ORANGE);
+        if(poligons != null){
+            poligons.get(poligonToDraw).draw(g, centerX, centerY, zoom, true);
+            poligonToDraw++;
+            if(poligonToDraw == poligons.size())
+                poligonToDraw = 0;
+            /*poligons.stream().forEach((p) -> {
+                p.draw(g, centerX, centerY, zoom, true);
+            });*/
         }
     }
     

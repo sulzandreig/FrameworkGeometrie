@@ -4,30 +4,35 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Objects;
 
-public class Triangle extends GeometricalObject{
-    String name;
+public class Triangle extends GeometricalObject implements Cloneable{
+    public String name;
     ArrayList<Point> points;
     ArrayList<Line> lines;
-    Color color;
+    public Color color;
     double epsilon =1e-10;
+    public boolean isProccesed = false;
+    public ArrayList<Point> visiblePoints;
+    
     public Triangle(Point A, Point B, Point C){
         points = new ArrayList<>();
         lines = new ArrayList<>();
+        visiblePoints = new ArrayList<>();
         name = A.name+B.name+C.name;
         color = new Color(new Random().nextInt(255), new Random().nextInt(255), new Random().nextInt(255));
         points.add(A);
-        lines.add(new Line("AB", A, B));
         points.add(B);
-        lines.add(new Line("BC", B, C));
         points.add(C);
+        lines.add(new Line("AB", A, B));
+        lines.add(new Line("BC", B, C));
         lines.add(new Line("CA", C, A));
-        for(Point p:points){
+        points.stream().forEach((p) -> {
             p.color = color;
-        }
-        for(Line l:lines){
+        });
+        lines.stream().forEach((l) -> {
             l.color = color;
-        }
+        });
     }
     
     public double getAngle(Point D){
@@ -77,6 +82,21 @@ public class Triangle extends GeometricalObject{
         });
         graphics.setColor(previousColor);
     }
+    
+    public ArrayList<Point> getPoints() throws CloneNotSupportedException{
+        ArrayList<Point> copyPoints = new ArrayList<>();
+        for(Point p:points){
+            copyPoints.add(p.clone());
+        }
+        return copyPoints;
+    }
+    public ArrayList<Line> getLines() throws CloneNotSupportedException{
+        ArrayList<Line> copyLines = new ArrayList<>();
+        for(Line l: lines){
+            copyLines.add((Line) l.clone());
+        }
+        return copyLines;
+    }
     /*
         Function contains tells us if the point recived as parameter is inside the triangle
     */
@@ -91,10 +111,104 @@ public class Triangle extends GeometricalObject{
         areaWithPointA += Math.abs(AC.getDeter(A));
         return ( Math.abs(areaWithPointA - Math.abs(getArea())) <= epsilon);
     }
+    
+    public boolean adiacent(Triangle x){
+        int aux = 0;
+        for (Point point : x.points) {
+            if (this.points.contains(point)) {
+                aux++;
+            }
+        }
+        return aux == 2;
+    }
+    
+    public void unLink(){
+        for(Line l:lines){
+            l.triangles.remove(this);
+        }
+    }
+    
+    public void setColor(Color color){
+        this.color = color;
+        for(Line l:lines){
+            l.color = color;
+        }
+    }
+    
+    public ArrayList<Triangle> getAdiacentTriangles(){
+        ArrayList<Triangle> adiacentTriangles = new ArrayList<>();
+        for(int i = 0; i < points.size(); i++){
+            for(int j = 0; j < points.size(); j++){
+                if(i!=j){
+                    for(Triangle t1:points.get(i).triangles){
+                        if(t1.equals(this))
+                            continue;
+                        for(Triangle t2:points.get(j).triangles){
+                            if(t2.equals(this))
+                                continue;
+                            if(t1.equals(t2) && !adiacentTriangles.contains(t1))
+                                adiacentTriangles.add(t2);
+                        }
+                    }
+                }
+            }
+        }
+        return adiacentTriangles;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 19 * hash + Objects.hashCode(this.name);
+        hash = 19 * hash + Objects.hashCode(this.points);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Triangle other = (Triangle) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.points, other.points)) {
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean equalsModificat(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Triangle other = (Triangle) obj;
+        boolean different = false;
+        for(Point p:points){
+            if(!this.points.contains(p))
+                different = true;
+        }
+        return different;
+    }
+    
     @Override
     public String toString(){
         String s = "";
         s += "Triunghi "+name+" <"+points+">";
         return s;
+    }
+    
+    @Override
+    public Triangle clone() throws CloneNotSupportedException{
+        Triangle t = (Triangle) super.clone();
+        return t;
+    
     }
 }
