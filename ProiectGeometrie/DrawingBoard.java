@@ -107,13 +107,9 @@ public class DrawingBoard extends JPanel{
         
         g.setColor(Color.ORANGE);
         if(poligons != null){
-            poligons.get(poligonToDraw).draw(g, centerX, centerY, zoom, true);
-            poligonToDraw++;
-            if(poligonToDraw == poligons.size())
-                poligonToDraw = 0;
-            /*poligons.stream().forEach((p) -> {
-                p.draw(g, centerX, centerY, zoom, true);
-            });*/
+            poligons.stream().forEach((p) -> {
+                p.draw(g, centerX, centerY, zoom, false);
+            });
         }
     }
     

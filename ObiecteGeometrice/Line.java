@@ -48,10 +48,11 @@ public class Line extends GeometricalObject implements Cloneable{
      *  <p>Primeste o alta linie si rezolva sistemul intersectie lor</p>
      * <p>Momentan functia adauga si intersectia in drawingBoard (daca exista)</p>
      * @param L
-     * @param ignoreOriginalPoints
+     * @param ignoreOriginalPointsAndLines
      * @return
      */
-    public ArrayList<Point> intersects(Line L, boolean ignoreOriginalPoints){
+    public ArrayList<Point> intersects(Line L, boolean ignoreOriginalPointsAndLines, Point originalPoint){
+        System.out.println("Intersectia lui "+this+" cu "+L);
         ArrayList<Point> intersections = new ArrayList<>();
         double[][] mSys = new double[2][];
         mSys[0] = new double[3];
@@ -68,7 +69,7 @@ public class Line extends GeometricalObject implements Cloneable{
             double[][] det3 = getMatrix2(mSys[0][0], mSys[0][1], mSys[1][0], mSys[1][1]);
             double x = calcDeter2(det1)/calcDeter2(det3);
             double y = calcDeter2(det2)/calcDeter2(det3);
-            Point i = new Point("Intersectie",x,y,0,Point.USER_POINT);
+            Point i = new Point(L.Y.name+"'",x,y,0,Point.USER_POINT);
             Point[] aP = new Point[5];
             aP[0] = this.X;
             aP[1] = this.Y;
@@ -77,17 +78,29 @@ public class Line extends GeometricalObject implements Cloneable{
             aP[4] = i;
             Arrays.sort(aP,null);
             if(apartineSegmenului(L, i) && apartineSegmenului(this, i)){
-                if(ignoreOriginalPoints){
-                    if(i.equals(L.X) || i.equals(L.Y) || i.equals(X) || i.equals(Y)){
+                System.out.println("Punctul "+i+" este intersectia");
+                if(ignoreOriginalPointsAndLines){
+                    System.out.println(this + " sau " +L + " contine pe "+i+"?");
+                    if(this.contains(i) || L.contains(i)){
+                        System.out.println("true");
                         return intersections;
                     }
+                    System.out.println("false");
+                    for(Line lAux:originalPoint.linesMadeByThisPoint){
+                        System.out.println("Linia "+lAux+" contine punctul "+i+"?");
+                        if(lAux.isOnLine(i)){
+                            System.out.println("true");
+                            return intersections;
+                        }
+                        System.out.println("false");
+                    }
                 }
-                System.out.println("Segmentele se intersecteaza in "+new Point("Inter",x,y,0,Point.USER_POINT));
+                System.out.println(this + " se intersecteaza in "+ i + " cu " + L);
                 //ProiectGeometrie.drawingBoard.points.add(new Point("Inter "+X.name+Y.name, x,y,0,Point.USER_POINT));
-                intersections.add(new Point("Inter",x, y, 0, Point.USER_POINT));
+                intersections.add(i);
                 return intersections;
             }else{
-                System.out.println("Segmentele nu se intersecteaza");
+                System.out.println(this + " nu se intersecteaza cu " + L);
                 return intersections;
             }
         }else{
@@ -245,8 +258,14 @@ public class Line extends GeometricalObject implements Cloneable{
      */
     public double getValueOf(double x){
         double yValue;
-        yValue = ((-X.y+Y.y)/(X.x-Y.x))*(x-X.x) + X.y;
-        return yValue;
+        yValue = ((X.y-Y.y)/(X.x-Y.x))*(x-X.x) + X.y;
+        if(Double.isNaN(yValue)){
+            if(X.y < Y.y)
+                yValue = Integer.MAX_VALUE;
+            else
+                yValue = Integer.MIN_VALUE;
+        }
+        return -yValue;
     }
     
     public void setColor(Color color){
@@ -265,7 +284,7 @@ public class Line extends GeometricalObject implements Cloneable{
         graphics.drawLine(((int)(X.x*zoom+X.z/2*zoom))+centrulX, ((int)(X.y*zoom-X.z/2*zoom))+centrulY,
                 ((int)(Y.x*zoom+Y.z/2*zoom))+centrulX, ((int)(Y.y*zoom-Y.z/2*zoom))+centrulY);
         X.draw(graphics, centrulX, centrulY, zoom, true);
-        Y.draw(graphics, centrulX, centrulY, zoom, true);
+        Y.draw(graphics, centrulX, centrulY, zoom, false);
         graphics.setColor(previousColor);
     }
 
@@ -301,9 +320,9 @@ public class Line extends GeometricalObject implements Cloneable{
     
     @Override
     public String toString(){
-        String s = "Line ecuation "+name+"\n" +"|"+matrix[0][0]+" "+matrix[0][1]+" "+matrix[0][2]+"|\n"
+        String s = "Line "+name;/*+"\n" +"|"+matrix[0][0]+" "+matrix[0][1]+" "+matrix[0][2]+"|\n"
                 + "|"+matrix[1][0]+" "+matrix[1][1]+" "+matrix[1][2]+"|\n"
-                + "|"+matrix[2][0]+" "+matrix[2][1]+" "+matrix[2][2]+"|\n";
+                + "|"+matrix[2][0]+" "+matrix[2][1]+" "+matrix[2][2]+"|\n";*/
         return s;
     }
 }

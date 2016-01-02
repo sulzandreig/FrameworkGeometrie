@@ -27,6 +27,7 @@ public class Point extends GeometricalObject implements Comparable<Point>, Clone
     public double z;
     public int tip;
     public Color color;
+    public ArrayList<Line> linesMadeByThisPoint;
     public boolean isVisible = false;
     public boolean isProccesed = false;
     /*
@@ -46,6 +47,7 @@ public class Point extends GeometricalObject implements Comparable<Point>, Clone
         }else{
             color = Color.BLACK;
         }
+        linesMadeByThisPoint = new ArrayList<>();
     }
     /*
         This function is used bye the weak poligon triangulation and will be modified later or deleted
