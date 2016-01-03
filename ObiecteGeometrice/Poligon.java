@@ -6,7 +6,6 @@
 package ObiecteGeometrice;
 
 import ProiectGeometrie.Drawable;
-import ProiectGeometrie.ProiectGeometrie;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -185,7 +184,7 @@ public class Poligon extends GeometricalObject implements Drawable{
                         }
                     }
                     //Punctul a fost deja procesat
-                    p.isProccesed = false;
+                    p.isProccesed = true;
                     //Daca punctul nu s-a schimbat, inseamna ca e visibil
                     if(!changed)
                         p.isVisible = true;
@@ -200,6 +199,7 @@ public class Poligon extends GeometricalObject implements Drawable{
             }
             //Dupa ce am verificat vizibilitatea celor 3 puncte din triunghi
             //daca toate punctele sunt vizibile
+            System.out.println(t + " are "+t.visiblePoints.size()+" puncte vizibile");
             if(t.visiblePoints.size()==3){
                 //Adaugam triunghiul la triunghiurile complet vizibile
                 foundTriangles.add(t);
@@ -215,6 +215,9 @@ public class Poligon extends GeometricalObject implements Drawable{
                     System.out.println(t + " este partial vizibil");
                     //Parcurgem fiecare punct vizibil din triung
                     for(Point p:t.visiblePoints){
+                        if(p.hasCreatedExtreme)
+                            continue;
+                        p.hasCreatedExtreme = true;
                         System.out.println("Creat extrema cu " + p);
                         //Cream o dreapta intre punctul interior si punctul vizibil
                         //din triunghi
@@ -236,7 +239,6 @@ public class Poligon extends GeometricalObject implements Drawable{
                         Point extrema = new Point("EXTREM", auxX, auxY, 0, Point.USER_POINT);
                         //Verificam ca punctul respectiv sa apartina dreptei (de scos)
                         if(!lAux.contains(extrema)){
-                            System.out.println("DA!");
                             //Cream o linie intre punctul interior si punctul extrem
                             lAux = new Line("EXTREMA "+p.name, extrema, A);
                             lAux.setColor(Color.orange);
@@ -249,10 +251,8 @@ public class Poligon extends GeometricalObject implements Drawable{
                                 //vizibil din triunghiul ce este procesat
                                 for(Line l:p.linesMadeByThisPoint){
                                     if(!line.equals(l)){
-                                        System.out.println(line + "->" +l);
                                         //Adaugam intersectiile
                                         intersections.add(new Pair<>(lAux.intersects(line, true, p), line));
-                                        System.out.println(line);
                                     }
                                 }
                             }

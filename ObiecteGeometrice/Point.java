@@ -30,6 +30,7 @@ public class Point extends GeometricalObject implements Comparable<Point>, Clone
     public ArrayList<Line> linesMadeByThisPoint;
     public boolean isVisible = false;
     public boolean isProccesed = false;
+    public boolean hasCreatedExtreme = false;
     /*
         Triangles that contain this point
     */

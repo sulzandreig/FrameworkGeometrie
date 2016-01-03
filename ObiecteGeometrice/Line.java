@@ -80,15 +80,15 @@ public class Line extends GeometricalObject implements Cloneable{
             if(apartineSegmenului(L, i) && apartineSegmenului(this, i)){
                 System.out.println("Punctul "+i+" este intersectia");
                 if(ignoreOriginalPointsAndLines){
-                    System.out.println(this + " sau " +L + " contine pe "+i+"?");
-                    if(this.contains(i) || L.contains(i)){
+                    System.out.println(this + " si " +L + " contine pe "+i+"?");
+                    if(this.contains(i) && L.contains(i)){
                         System.out.println("true");
                         return intersections;
                     }
                     System.out.println("false");
                     for(Line lAux:originalPoint.linesMadeByThisPoint){
                         System.out.println("Linia "+lAux+" contine punctul "+i+"?");
-                        if(lAux.isOnLine(i)){
+                        if(lAux.isOnSegment(i)){
                             System.out.println("true");
                             return intersections;
                         }
@@ -116,6 +116,9 @@ public class Line extends GeometricalObject implements Cloneable{
                 Arrays.sort(aP,null);
                 for(Point p:aP){
                     System.out.println(p);
+                }
+                if(ignoreOriginalPointsAndLines){
+                    return intersections;
                 }
                 if(apartineSegmenului(L, X) && apartineSegmenului(L, Y)){
                     System.out.println("Intersectia segmentelor este "+X + " si "+Y);
@@ -239,6 +242,15 @@ public class Line extends GeometricalObject implements Cloneable{
     public boolean isOnLine(Point Z){
         double deter = getDeter(Z);
         return deter == 0;
+    }
+    
+    public boolean isOnSegment(Point Z){
+        if(isOnLine(Z)){
+            if(Math.abs(X.x-Z.x) + Math.abs(Z.x-Y.x) == Math.abs(X.x - Y.x)){
+                return true;
+            }
+        }
+        return false;
     }
     
     /**
