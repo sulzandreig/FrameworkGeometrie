@@ -8,7 +8,6 @@ package ObiecteGeometrice;
 import ProiectGeometrie.Drawable;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
@@ -128,7 +127,7 @@ public class Poligon extends GeometricalObject implements Drawable{
             System.out.println("Punctul se afla in interiorul poligonului, mai exact in triunghiul "+originalTriangle);
             ArrayList<Triangle> toProcess;
             toProcess = originalTriangle.getAdiacentTriangles();
-            visibility = createVisibility(aux, toProcess, p);
+            createVisibility(aux, toProcess, p);
             LinkedList<Point> puncteVisibile = new LinkedList<>();
             for(Point punct:points){
                 if(punct.isVisible)
@@ -142,228 +141,213 @@ public class Poligon extends GeometricalObject implements Drawable{
         return visibility;
     }
     
-    private Poligon createVisibility(ArrayList<Triangle> foundTriangles,
-        ArrayList<Triangle> toProcess, Point A) throws CloneNotSupportedException{
+    private void createVisibility(ArrayList<Triangle> foundTriangles, ArrayList<Triangle> toProcess, Point A) throws CloneNotSupportedException{
         ArrayList<Triangle> toAddToProcess = new ArrayList<>();
         //Luam toate triunghiurile ce trebuie procesate
-        do{
-            for(Triangle triunghiActual:toProcess){
-                //Daca triunghiul a fost procesat, nu facem nimic
-                if(triunghiActual.isProccesed){
-                    continue;
-                }
-                //Altfel
-                triunghiActual.isProccesed = true;
-                System.out.println("Procesam: "+triunghiActual);
-                //Luam fiecare puncti din triunghi
-                for(Point punctActual:triunghiActual.points){
-                    System.out.println("Luam punctul "+punctActual);
-                    //Facem o linie intre punctul interior si punctul din triunghi
-                    Line aux = new Line(A.name+punctActual.name, A, punctActual);
-                    //Daca punctul nu a fost procesat
-                    if(!punctActual.isProccesed){
-                        //Tinem minte daca i s-a schimbat vizibilitatea
-                        boolean changed = false;
-                        //Trecem prin toate liniile poligonului
-                        for(Line l:lines){
-                            //Daca intersectia liniei create cu linia din poligon returneaza ceva
-                            ArrayList<Point> intersectie = aux.intersects(l, true, punctActual);
-                            if(!intersectie.isEmpty()){
-                                boolean intersectieValida = true;
-                                for(Point punctIntersectie:intersectie){
-                                    if(punctIntersectie.equals(punctActual))
-                                        intersectieValida = false;
-                                }
-                                if(!intersectieValida)
-                                    break;
-                                System.out.println(aux+" intersecteaza "+l);
-                                /*Stim ca triunghiul nu e complet vizibil si ca 
-                                vizibilitatea punctului s-a schimbat*/
-                                changed = true;
-                                //Pentru ca deja am gasit o linie a poligonului ce
-                                //intersecteaza linia vizibilitatii nu trebuie sa mai 
-                                //cautam
-                                break;
-                            }
-                        }
-                        //Punctul a fost deja procesat
-                        punctActual.isProccesed = true;
-                        //Daca punctul nu s-a schimbat, inseamna ca e visibil
-                        if(!changed)
-                            punctActual.isVisible = true;
-                    }
-                    if(punctActual.isVisible){
-                        //Daca punctul e vizibil il adaugam in lista de puncte vizibile
-                        //ale triunghiului si setam si punctul din poligon sa fie vizibil
-                        triunghiActual.visiblePoints.add(punctActual);
-                        points.get(points.indexOf(punctActual)).isVisible = true;
-                    }
-                    System.out.println("visible "+punctActual.isVisible);
-                }
-                //Dupa ce am verificat vizibilitatea celor 3 puncte din triunghi
-                //daca toate punctele sunt vizibile
-                System.out.println(triunghiActual + " are "+triunghiActual.visiblePoints.size()+" puncte vizibile");
-                if(triunghiActual.visiblePoints.size()==3){
-                    //Adaugam triunghiul la triunghiurile complet vizibile
-                    foundTriangles.add(triunghiActual);
-                    System.out.println(triunghiActual + " este complet vizibil");
-                }else{
-                    //Daca unu sau niciun punct nu este vizibil inseamna ca triunghi-ul
-                    //nu este deloc vizibil
-                    if(triunghiActual.visiblePoints.size() <=1){
-                        System.out.println(triunghiActual + " nu este vizibil");
-                    }else{
-                        //Daca 2 puncte sunt vizibile inseamna ca triunghiul este partial
-                        //vizibil
-                        System.out.println(triunghiActual + " este partial vizibil");
-                        //Parcurgem fiecare punct vizibil din triung
-                        for(Point punctVizibil:triunghiActual.visiblePoints){
-                            System.out.println("Creat extrema cu " + punctVizibil);
-                            //Cream o dreapta intre punctul interior si punctul vizibil
-                            //din triunghi
-                            Line liniaVizibilitati = new Line("lAux", A, punctVizibil);
-                            double exteriorX;
-                            if(A.x < punctVizibil.x){
-                                exteriorX = 100;
-                            }else{
-                                exteriorX = -100;
-                            }
-                            //Gasim un punct apartinand dreptei create care se afla 
-                            //in exteriorul poligonului
-                            double exteriorY = liniaVizibilitati.getValueOf(exteriorX);
-                            while(Double.isInfinite(exteriorY)){
-                                System.out.println("exteriorX="+exteriorX+" exteriorY=" + exteriorY);
-                                exteriorY = liniaVizibilitati.getValueOf(exteriorX++);
-                            }
-                            //Punctul de care vorbeam
-                            Point punctExterior = new Point("EXTERIOR", exteriorX, exteriorY, 0, Point.USER_POINT);
-                            
-                            //Cream o linie intre punctul interior si punctul extrem
-                            Line liniaSpreExterior = new Line("EXTREMA "+punctVizibil.name, punctExterior, A);
-                            liniaSpreExterior.setColor(Color.orange);
-                            System.out.println(liniaSpreExterior);
-                            Pair<Point,Line> closest = getClosestIntersection(A, punctVizibil, liniaSpreExterior);
-                            //Daca exista cel mai apropiat punct de intersectie
-                            if(closest != null){
-                                addPointToPoligon(closest);
-                            }
-                        }
-                    }
-                }
-                //Daca triunghiul are mai mult de un punct vizibil, adaugam triunghiurile adiacente
-                //la procesare atat timp cat nu au fost adaugate deja 
-                if(triunghiActual.visiblePoints.size()>0){
-                    ArrayList<Triangle> aux = triunghiActual.getAdiacentTriangles();
-                    for(Triangle tAdiacent:aux){
-                        /*boolean found = false;
-                        for(Triangle f:foundTriangles){
-                            if(tAdiacent.equalsModificat(f)){
-                                found = true;
-                                break;
-                            }
-                        }*/
-                        if(!tAdiacent.isProccesed){
-                            toAddToProcess.add(tAdiacent);
-                        }
-                    }
-                }
-            }
-            toProcess.clear();
-            toProcess.addAll(toAddToProcess);
-            toAddToProcess.clear();
-        }while(!toProcess.isEmpty());
-        return this;
-    }
-    
-    /**
-     *
-     * @param points
-     */
-    public void determinaVizibilitate(List points){
-        
-    }
-    
-    private void addPointToPoligon(Pair<Point,Line> closest){
-        //LinkedList<Point> points = subject.points;
-        //Adaugam linia extrema sa apara pe ecran
-        //ProiectGeometrie.drawingBoard.lines.add((Line) lAux.clone());
-        //Trecem prin toate punctele poligonului si adaugam
-        //punctul de intersectie in poligon intre 2 puncte ce apartin
-        //deja poligonului
-        for(int i = 0; i<points.size()-1;i++){
-            if(closest.getValue().contains(points.get(i))&&closest.getValue().contains(points.get(i+1))){
-                System.out.println("Adaugat "+closest + " la indexul "+(i+1));
-                //Setam noul punct adaugat ca fiind vizibil si procesat
-                points.add(i+1, closest.getKey());
-                points.get(i+1).isVisible = true;
-                points.get(i+1).isProccesed = true;
-                break;
-            }
-        }
-        //Resetam toate punctele
-        for(Point pPrim:points){
-            pPrim.linesMadeByThisPoint.clear();
-        }
-        //Golim lista de linii
-        lines.clear();
-        name = "";
-        //Cream noile linii ale poligonului de vizibilitate
-        for(int i = 0; i<points.size()-1;i++){
-            if(i<points.size()-2 && points.get(i).name.equals(points.get(i+1).name)){
-                points.remove(i);
-                i--;
+        for(Triangle t:toProcess){
+            //Daca triunghiul a fost procesat, nu facem nimic
+            if(t.isProccesed){
                 continue;
             }
-            name = name + points.get(i).name;
-            lines.add(new Line(points.get(i).name+points.get(i+1).name,
-                    points.get(i), points.get(i+1)));
-            points.get(i).linesMadeByThisPoint.add(lines.getLast());
-            points.get(i+1).linesMadeByThisPoint.add(lines.getLast());
-        }
-        //Setam aceasi culoare pe toate liniile
-        lines.stream().forEach((l) -> {
-            l.color = color;
-        });
-    }
-    
-    private Pair<Point,Line> getClosestIntersection(Point A, Point punctVizibil, Line linieSpreExterior){
-        //Structura ce va contine toate intersectiile dreptei
-        ArrayList<Pair<ArrayList<Point>,Line>> intersections = new ArrayList<>();
-        //Trecem prin toate liniile poligonului
-        for(Line line:lines){
-            //Trecem prin liniile punctului (liniile facute cu ajutorul lui)
-            //vizibil din triunghiul ce este procesat
-            for(Line l:punctVizibil.linesMadeByThisPoint){
-                if(!line.equals(l)){
-                    //Adaugam intersectiile
-                    intersections.add(new Pair<>(linieSpreExterior.intersects(line, true, punctVizibil), line));
+            //Altfel
+            t.isProccesed = true;
+            System.out.println("Procesam: "+t);
+            //Luam fiecare puncti din triunghi
+            for(Point p:t.points){
+                System.out.println("Luam punctul "+p);
+                //Facem o linie intre punctul interior si punctul din triunghi
+                Line aux = new Line(A.name+p.name, A, p);
+                //Daca punctul nu a fost procesat
+                if(!p.isProccesed){
+                    //Tinem minte daca i s-a schimbat vizibilitatea
+                    boolean changed = false;
+                    //Trecem prin toate liniile poligonului
+                    for(Line l:lines){
+                        //Daca intersectia liniei create cu linia din poligon returneaza ceva
+                        ArrayList<Point> intersectie = aux.intersects(l, true, p);
+                        if(!intersectie.isEmpty()){
+                            boolean intersectieValida = true;
+                            for(Point punctIntersectie:intersectie){
+                                if(punctIntersectie.equals(p))
+                                    intersectieValida = false;
+                            }
+                            if(!intersectieValida)
+                                break;
+                            System.out.println(aux+" intersecteaza "+l);
+                            /*Stim ca triunghiul nu e complet vizibil si ca 
+                            vizibilitatea punctului s-a schimbat*/
+                            changed = true;
+                            //Pentru ca deja am gasit o linie a poligonului ce
+                            //intersecteaza linia vizibilitatii nu trebuie sa mai 
+                            //cautam
+                            break;
+                        }
+                    }
+                    //Punctul a fost deja procesat
+                    p.isProccesed = true;
+                    //Daca punctul nu s-a schimbat, inseamna ca e visibil
+                    if(!changed)
+                        p.isVisible = true;
+                }
+                if(p.isVisible){
+                    //Daca punctul e vizibil il adaugam in lista de puncte vizibile
+                    //ale triunghiului si setam si punctul din poligon sa fie vizibil
+                    t.visiblePoints.add(p);
+                    points.get(points.indexOf(p)).isVisible = true;
+                }
+                System.out.println("visible "+p.isVisible);
+            }
+            //Dupa ce am verificat vizibilitatea celor 3 puncte din triunghi
+            //daca toate punctele sunt vizibile
+            System.out.println(t + " are "+t.visiblePoints.size()+" puncte vizibile");
+            if(t.visiblePoints.size()==3){
+                //Adaugam triunghiul la triunghiurile complet vizibile
+                foundTriangles.add(t);
+                System.out.println(t + " este complet vizibil");
+            }else{
+                //Daca unu sau niciun punct nu este vizibil inseamna ca triunghi-ul
+                //nu este deloc vizibil
+                if(t.visiblePoints.size() <=1){
+                    System.out.println(t + " nu este vizibil");
+                }else{
+                    //Daca 2 puncte sunt vizibile inseamna ca triunghiul este partial
+                    //vizibil
+                    System.out.println(t + " este partial vizibil");
+                    //Parcurgem fiecare punct vizibil din triung
+                    for(Point p:t.visiblePoints){
+                        if(p.hasCreatedExtreme)
+                            continue;
+                        p.hasCreatedExtreme = true;
+                        System.out.println("Creat extrema cu " + p);
+                        //Cream o dreapta intre punctul interior si punctul vizibil
+                        //din triunghi
+                        Line lAux = new Line("lAux", A, p);
+                        double auxX;
+                        if(A.x < p.x){
+                            auxX = 100;
+                        }else{
+                            auxX = -100;
+                        }
+                        //Gasim un punct apartinand dreptei create care se afla 
+                        //in exteriorul poligonului
+                        double auxY = lAux.getValueOf(auxX);
+                        while(Double.isInfinite(auxY)){
+                            System.out.println("auxX="+auxX+" auxY=" + auxY);
+                            auxY = lAux.getValueOf(auxX++);
+                        }
+                        //Punctul de care vorbeam
+                        Point extrema = new Point("EXTREM", auxX, auxY, 0, Point.USER_POINT);
+                        //Verificam ca punctul respectiv sa apartina dreptei (de scos)
+                        if(!lAux.contains(extrema)){
+                            //Cream o linie intre punctul interior si punctul extrem
+                            lAux = new Line("EXTREMA "+p.name, extrema, A);
+                            lAux.setColor(Color.orange);
+                            System.out.println(lAux);
+                            //Structura ce va contine toate intersectiile dreptei
+                            ArrayList<Pair<ArrayList<Point>,Line>> intersections = new ArrayList<>();
+                            //Trecem prin toate liniile poligonului
+                            for(Line line:lines){
+                                //Trecem prin liniile punctului (liniile facute cu ajutorul lui)
+                                //vizibil din triunghiul ce este procesat
+                                for(Line l:p.linesMadeByThisPoint){
+                                    if(!line.equals(l)){
+                                        //Adaugam intersectiile
+                                        intersections.add(new Pair<>(lAux.intersects(line, true, p), line));
+                                    }
+                                }
+                            }
+                            //Cea mai apropiata pereche (punct de intersectie)-linie fata
+                            //de punctul interior
+                            Pair<Point,Line> closest = null;
+                            //Trecem print toate intersectiile
+                            for(Pair<ArrayList<Point>,Line> pairAux:intersections){
+                                //Trecem prin toate punctele acelor intersectii
+                                //(daca gasim un segment ce se afla in interior liniei
+                                //extreme, luam cel mai apropiat punct din acel segment
+                                for(Point pointAux:pairAux.getKey()){
+                                    if(closest == null){
+                                        closest = new Pair(pointAux,pairAux.getValue());
+                                    }else{
+                                        //Folosind clasa vector aflam distanta de la 
+                                        //punctul interior la un punct de intersectie
+                                        //iar vectorul cu cea mai mica norma este creat
+                                        //cu punctul cel mai apropiat
+                                        if(new VectorGeo(A, closest.getKey()).norm() > new VectorGeo(A, pointAux).norm()
+                                                && new VectorGeo(A,p).norm() < new VectorGeo(A, pointAux).norm()){
+                                            closest = new Pair(pointAux,pairAux.getValue());
+                                        }
+                                    }
+                                }
+                            }
+                            //Daca exista cel mai apropiat punct de intersectie
+                            if(closest != null){
+                                //Adaugam linia extrema sa apara pe ecran
+                                //ProiectGeometrie.drawingBoard.lines.add((Line) lAux.clone());
+                                //Trecem prin toate punctele poligonului si adaugam
+                                //punctul de intersectie in poligon intre 2 puncte ce apartin
+                                //deja poligonului
+                                for(int i = 0; i<points.size()-1;i++){
+                                    lAux = new Line(points.get(i).name+points.get(i+1), points.get(i), points.get(i+1));
+                                    if(lAux.equals(closest.getValue())){
+                                        System.out.println("Adaugat "+closest + " la indexul "+(i+1));
+                                        //Setam noul punct adaugat ca fiind vizibil si procesat
+                                        points.add(i+1, closest.getKey());
+                                        points.get(i+1).isVisible = true;
+                                        points.get(i+1).isProccesed = true;
+                                        break;
+                                    }
+                                }
+                                //Resetam toate punctele
+                                for(Point pPrim:points){
+                                    pPrim.linesMadeByThisPoint.clear();
+                                }
+                                //Golim lista de linii
+                                lines.clear();
+                                name = "";
+                                //Cream noile linii ale poligonului de vizibilitate
+                                for(int i = 0; i<points.size()-1;i++){
+                                    if(i<points.size()-2 && points.get(i).name.equals(points.get(i+1).name)){
+                                        points.remove(i);
+                                        i--;
+                                        continue;
+                                    }
+                                    name = name + points.get(i).name;
+                                    lines.add(new Line(points.get(i).name+points.get(i+1).name,
+                                            points.get(i), points.get(i+1)));
+                                    points.get(i).linesMadeByThisPoint.add(lines.getLast());
+                                    points.get(i+1).linesMadeByThisPoint.add(lines.getLast());
+                                }
+                                //Setam aceasi culoare pe toate liniile
+                                lines.stream().forEach((l) -> {
+                                    l.color = color;
+                                });
+                            }
+                        }
+                    }
                 }
             }
-        }
-        //Cea mai apropiata pereche (punct de intersectie)-linie fata
-        //de punctul interior
-        Pair<Point,Line> closest = null;
-        //Trecem print toate intersectiile
-        for(Pair<ArrayList<Point>,Line> pairAux:intersections){
-            //Trecem prin toate punctele acelor intersectii
-            //(daca gasim un segment ce se afla in interior liniei
-            //extreme, luam cel mai apropiat punct din acel segment
-            for(Point pointAux:pairAux.getKey()){
-                if(closest == null){
-                    closest = new Pair(pointAux,pairAux.getValue());
-                }else{
-                    //Folosind clasa vector aflam distanta de la 
-                    //punctul interior la un punct de intersectie
-                    //iar vectorul cu cea mai mica norma este creat
-                    //cu punctul cel mai apropiat
-                    if(new VectorGeo(A, closest.getKey()).norm() > new VectorGeo(A, pointAux).norm()
-                            && new VectorGeo(A,punctVizibil).norm() < new VectorGeo(A, pointAux).norm()){
-                        closest = new Pair(pointAux,pairAux.getValue());
+            //Daca triunghiul are mai mult de un punct vizibil, adaugam triunghiurile adiacente
+            //la procesare atat timp cat nu au fost adaugate deja 
+            if(t.visiblePoints.size()>0){
+                ArrayList<Triangle> aux = t.getAdiacentTriangles();
+                for(Triangle tAdiacent:aux){
+                    /*boolean found = false;
+                    for(Triangle f:foundTriangles){
+                        if(tAdiacent.equalsModificat(f)){
+                            found = true;
+                            break;
+                        }
+                    }*/
+                    if(!tAdiacent.isProccesed){
+                        toAddToProcess.add(tAdiacent);
                     }
                 }
             }
         }
-        return closest;
+        toProcess.clear();
+        toProcess.addAll(toAddToProcess);
+        if(!toProcess.isEmpty())
+            createVisibility(foundTriangles, toProcess, A);
     }
     
     @Override

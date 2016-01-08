@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Arrays;
 import java.util.Random;
+import ProiectGeometrie.ProiectGeometrie;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -77,6 +78,7 @@ public class Line extends GeometricalObject implements Cloneable{
             aP[4] = i;
             Arrays.sort(aP,null);
             if(apartineSegmenului(L, i) && apartineSegmenului(this, i)){
+                System.out.println("Punctul "+i+" este intersectia");
                 if(ignoreOriginalPointsAndLines){
                     System.out.println(this + " si " +L + " contine pe "+i+"?");
                     if(this.contains(i) && L.contains(i)){
@@ -121,38 +123,38 @@ public class Line extends GeometricalObject implements Cloneable{
                 if(apartineSegmenului(L, X) && apartineSegmenului(L, Y)){
                     System.out.println("Intersectia segmentelor este "+X + " si "+Y);
                     //ProiectGeometrie.drawingBoard.lines.add(new Line("Inter "+X+Y,X,Y));
-                    //intersections.add(X);
-                    //intersections.add(Y);
+                    intersections.add(X);
+                    intersections.add(Y);
                     return intersections;
                 }else if(apartineSegmenului(this, L.X) && apartineSegmenului(this, L.Y)){
                     System.out.println("Intersectia segmentelor este "+L.X + " si "+L.Y);
                     //ProiectGeometrie.drawingBoard.lines.add(new Line("Inter "+L.X+L.Y,L.X,L.Y));
-                    //intersections.add(L.X);
-                    //intersections.add(L.Y);
+                    intersections.add(L.X);
+                    intersections.add(L.Y);
                     return intersections;
                 }else if(apartineSegmenului(L, X) && !apartineSegmenului(L, Y) && apartineSegmenului(this, L.X)){
                     System.out.println("Intersectia segmentelor este "+X + " si "+L.X);
                     //ProiectGeometrie.drawingBoard.lines.add(new Line("Inter "+X+L.X,X,L.X));
-                    //intersections.add(X);
-                    //intersections.add(L.X);
+                    intersections.add(X);
+                    intersections.add(L.X);
                     return intersections;
                 }else if(apartineSegmenului(L, X) && !apartineSegmenului(L, Y) && apartineSegmenului(this, L.Y)){
                     System.out.println("Intersectia segmentelor este "+X + " si "+L.Y);
                     //ProiectGeometrie.drawingBoard.lines.add(new Line("Inter "+X+L.Y,X,L.Y));
-                    //intersections.add(X);
-                    //intersections.add(L.Y);
+                    intersections.add(X);
+                    intersections.add(L.Y);
                     return intersections;
                 }else if(!apartineSegmenului(L, X) && apartineSegmenului(L, Y) && apartineSegmenului(this, L.X)){
                     System.out.println("Intersectia segmentelor este "+Y + " si "+L.X);
                     //ProiectGeometrie.drawingBoard.lines.add(new Line("Inter "+Y+L.X,Y,L.X));
-                    //intersections.add(Y);
-                    //intersections.add(L.X);
+                    intersections.add(Y);
+                    intersections.add(L.X);
                     return intersections;
                 }else if(!apartineSegmenului(L, X) && apartineSegmenului(L, Y) && apartineSegmenului(this, L.Y)){
                     System.out.println("Intersectia segmentelor este "+Y + " si "+L.Y);
                     //ProiectGeometrie.drawingBoard.lines.add(new Line("Inter "+Y+L.Y,Y,L.Y));
-                    //intersections.add(Y);
-                    //intersections.add(L.Y);
+                    intersections.add(Y);
+                    intersections.add(L.Y);
                     return intersections;
                 }
             }
