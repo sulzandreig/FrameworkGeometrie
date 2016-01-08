@@ -20,7 +20,7 @@ public class Triangle extends GeometricalObject implements Cloneable{
         lines = new ArrayList<>();
         visiblePoints = new ArrayList<>();
         name = A.name+B.name+C.name;
-        color = new Color(new Random().nextInt(255), new Random().nextInt(255), new Random().nextInt(255));
+        color = Color.RED;
         points.add(A);
         points.add(B);
         points.add(C);
