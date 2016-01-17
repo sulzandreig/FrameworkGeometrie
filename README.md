@@ -1,3 +1,3 @@
 # src
 FrameWork
-Polygon visibility using triangulatin
+Polygon visibility using a triangulatin
