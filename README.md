@@ -1,3 +1,3 @@
 # src
 FrameWork
-Visibility of a polygon using a triangulation
+Polygon visibility using triangulatin
