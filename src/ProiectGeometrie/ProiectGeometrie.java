@@ -85,7 +85,8 @@ public class ProiectGeometrie extends JFrame{
         }
         Point target = new Point(fs.next(), fs.nextDouble(), fs.nextDouble(), 0, Point.USER_POINT);
         Poligon P = new Poligon((LinkedList<Point>) pointsInPoligon.clone());
-        drawingBoard.triangles = P.weakEarCuttingTriangulation();
+        //drawingBoard.triangles = P.weakEarCuttingTriangulation();
+        P.weakEarCuttingTriangulation();
         Poligon visibility = P.getPointVisibility(target);
         P.name="";
         drawingBoard.poligons.add(P);

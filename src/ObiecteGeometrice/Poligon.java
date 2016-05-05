@@ -242,7 +242,7 @@ public class Poligon extends GeometricalObject implements Drawable{
                             //Cream o linie intre punctul interior si punctul extrem
                             Line linieExtrema = new Line("EXTREMA "+forExtremePoint.name, punctExterior, punctInterior);
                             linieExtrema.setColor(Color.orange);
-                            ProiectGeometrie.ProiectGeometrie.drawingBoard.lines.add(linieExtrema);
+                            //ProiectGeometrie.ProiectGeometrie.drawingBoard.lines.add(linieExtrema);
                             System.out.println(linieExtrema);
                             //Structura ce va contine toate intersectiile dreptei
                             ArrayList<Pair<ArrayList<Point>,Line>> intersections = new ArrayList<>();
